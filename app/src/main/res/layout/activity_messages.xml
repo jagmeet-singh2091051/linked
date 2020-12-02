@@ -28,6 +28,7 @@
             android:id="@+id/username"
             />
 
+
     </androidx.appcompat.widget.Toolbar>
 
     <RelativeLayout
@@ -36,6 +37,14 @@
         android:padding="5dp"
         android:background="#FFF"
         android:layout_alignParentBottom="true">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/discussion_activity_recycler_view"
+            android:background="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/text_send"
+            android:layout_below="@+id/toolbar"/>
 
         <EditText
             android:id="@+id/text_send"
