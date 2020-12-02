@@ -41,7 +41,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/text_send"/>
+            android:layout_above="@id/text_send"
+            ></androidx.recyclerview.widget.RecyclerView>
 
         <EditText
             android:id="@+id/text_send"
