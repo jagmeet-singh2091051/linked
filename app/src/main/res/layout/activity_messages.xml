@@ -38,13 +38,10 @@
         android:background="#FFF"
         android:layout_alignParentBottom="true">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/discussion_activity_recycler_view"
-            android:background="@android:color/white"
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/text_send"
-            android:layout_below="@+id/toolbar"/>
+            android:layout_above="@+id/text_send"/>
 
         <EditText
             android:id="@+id/text_send"
@@ -62,6 +59,5 @@
             android:layout_alignParentRight="true" />
 
     </RelativeLayout>
-
 
 </RelativeLayout>
