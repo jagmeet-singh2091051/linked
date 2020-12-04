@@ -7,10 +7,8 @@
 
     <include
         layout="@layout/bar_layout"
-        
-        />
 
-    />
+        />
 
 
 </RelativeLayout>
