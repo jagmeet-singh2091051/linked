@@ -7,8 +7,17 @@
 
     <include
         layout="@layout/bar_layout"
-
         />
-
-
 </RelativeLayout>
+
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:tools="http://schemas.android.com/tools"
+tools:context=".RegisterActivity">
+    <TextView
+        android:layout_width="warp_content"
+        android:layout_height="match_parent"
+        android:textSize="30dp"/>
+</LinearLayout>
