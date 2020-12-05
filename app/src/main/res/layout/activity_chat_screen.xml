@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
 
     <androidx.appcompat.widget.Toolbar
@@ -29,16 +29,15 @@
             />
     </androidx.appcompat.widget.Toolbar>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleView"
+        android:id="@+id/chatScreenRecycleView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        ></androidx.recyclerview.widget.RecyclerView>
-</RelativeLayout>
+        android:layout_below="@id/toolbar"
+        android:padding="5dp"
+        tools:listitem="@layout/message_container"/>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -64,4 +63,6 @@
             android:layout_alignParentRight="true" />
 
     </RelativeLayout>
+
+</RelativeLayout>
 

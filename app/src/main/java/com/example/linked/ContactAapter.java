@@ -17,6 +17,7 @@ import java.util.List;
 public class ContactAapter extends RecyclerView.Adapter<ContactAapter.ContactViewholder> {
 
     List<ContactModel> contactList = new ArrayList<ContactModel>();
+    private static ClickListener clickListener;
 
     public ContactAapter(List<ContactModel> list){
         this.contactList = list;
@@ -47,7 +48,7 @@ public class ContactAapter extends RecyclerView.Adapter<ContactAapter.ContactVie
         return contactList.size();
     }
 
-    public static class ContactViewholder extends RecyclerView.ViewHolder{
+    public static class ContactViewholder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private ImageView profileImage;
         private TextView username;
@@ -62,5 +63,18 @@ public class ContactAapter extends RecyclerView.Adapter<ContactAapter.ContactVie
             lastMsg = itemView.findViewById(R.id.contact_item_last_msg);
             timestamp = itemView.findViewById(R.id.contact_item_timestamp);
         }
+
+        @Override
+        public void onClick(View v) {
+            clickListener.onItemClick(getAdapterPosition(), v);
+        }
+    }
+
+    public void setOnClickListener(ClickListener clickListener){
+        ContactAapter.clickListener = clickListener;
+    }
+
+    public interface ClickListener{
+        void onItemClick(int position, View v);
     }
 }
