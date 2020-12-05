@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactAapter extends RecyclerView.Adapter<ContactAapter.Viewholer> {
+public class ContactAapter extends RecyclerView.Adapter<ContactAapter.ContactViewholder> {
 
     List<ContactModel> contactList = new ArrayList<ContactModel>();
 
@@ -24,12 +24,12 @@ public class ContactAapter extends RecyclerView.Adapter<ContactAapter.Viewholer>
 
     @NonNull
     @Override
-    public Viewholer onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new Viewholer(LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_container, parent, false));
+    public ContactViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ContactViewholder(LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_container, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Viewholer holder, int position) {
+    public void onBindViewHolder(@NonNull ContactViewholder holder, int position) {
 
         ContactModel contact = contactList.get(position);
 
@@ -47,14 +47,14 @@ public class ContactAapter extends RecyclerView.Adapter<ContactAapter.Viewholer>
         return contactList.size();
     }
 
-    public static class Viewholer extends RecyclerView.ViewHolder{
+    public static class ContactViewholder extends RecyclerView.ViewHolder{
 
         private ImageView profileImage;
         private TextView username;
         private TextView lastMsg;
         private TextView timestamp;
 
-        public Viewholer(View itemView) {
+        public ContactViewholder(View itemView) {
             super(itemView);
 
             profileImage = itemView.findViewById(R.id.contact_item_profile_image);

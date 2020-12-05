@@ -24,7 +24,7 @@
             android:padding="8dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:id="@+id/show_message"
+            android:id="@+id/msgReceived"
             android:textSize="15sp"
             android:textColor="#FFFFFF"/>
 
