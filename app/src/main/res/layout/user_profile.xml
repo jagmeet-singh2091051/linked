@@ -5,22 +5,32 @@
     android:layout_height="match_parent"
     android:padding="8dp"
     android:background="@drawable/gradient">
-
+    />
+    <include layout="@layout/bar_layout"
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <include
-        layout="@layout/bar_layout"
-        />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="40dp"
+        android:textColor="@color/White"
+        android:fontFamily="sans-serif-thin"
+        android:layout_marginTop="55dp"
+        android:text="Your Profile"
+        />
     <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_marginTop="150dp"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
         android:id="@+id/profile_image"
-        android:layout_marginTop="100dp"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@mipmap/ic_launcher"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,7 +39,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/profile_image"
         android:layout_marginTop="40dp"
-        android:text="user1"
+        android:text=""
         android:textStyle="bold"/>
 
 </RelativeLayout>
