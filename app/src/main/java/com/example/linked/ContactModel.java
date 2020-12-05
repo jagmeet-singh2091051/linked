@@ -12,6 +12,13 @@ public class ContactModel {
 
     }
 
+    public ContactModel(String userId, String userName, String imageUrl, MessageModel lastMsg){
+        this.userId = userId;
+        this.userName = userName;
+        this.imageUrl = imageUrl;
+        this.lastMsg = lastMsg;
+    }
+
     public ContactModel(String userId, String userName, String imageUrl, MessageModel lastMsg, MessageModel[] msgs){
         this.userId = userId;
         this.userName = userName;

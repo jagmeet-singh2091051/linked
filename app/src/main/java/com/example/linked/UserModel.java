@@ -6,14 +6,24 @@ public final class UserModel {
     private String email;
     private String username;
 
-    void UserModel(){
+    private static UserModel userInstance;
+
+    private UserModel(){
 
     }
 
-    void UserModel(String userId, String email, String username){
+    private UserModel(String userId, String email, String username){
         this.userId = userId;
         this.email = email;
         this.username = username;
+    }
+
+    public static UserModel getInstance(){
+        if(userInstance == null){
+            userInstance = new UserModel();
+        }
+
+        return userInstance;
     }
 
     public String getUserId() {

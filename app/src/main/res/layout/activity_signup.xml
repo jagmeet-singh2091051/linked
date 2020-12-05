@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/gradient">
+    <include
+        layout="@layout/bar_layout"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+        <TextView
+            android:layout_marginTop="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:textColor="@color/White"
+            android:text="Welcome to Linked"
+            android:layout_marginBottom="30dp"
+
+            />
+        <EditText
+            android:id="@+id/signup_username"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/White"
+            android:hint="Username"
+            android:gravity="center"
+            />
+        <EditText
+            android:id="@+id/signup_email"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/White"
+            android:hint="Enter your Email"
+            android:gravity="center"/>
+        <EditText
+            android:id="@+id/signup_password"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/White"
+            android:hint="Enter Password"
+            android:gravity="center"
+            android:layout_marginBottom="5dp"/>
+
+        <Button
+            android:id="@+id/signup_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign Up"
+            />
+    </LinearLayout>
+</RelativeLayout>
