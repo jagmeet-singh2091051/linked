@@ -45,15 +45,17 @@
         android:textStyle="bold"
         android:gravity="center"/>
     <TextView
+        android:id="@+id/example"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/profileName"
         android:text="Example profile"
         />
     <Button
         android:id="@+id/settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/profileName"
+        android:layout_below="@id/example"
         android:textColor="@color/White"
         android:text="Settings"
         style="?android:attr/borderlessButtonStyle"/>
@@ -66,11 +68,20 @@
         android:text="About"
         style="?android:attr/borderlessButtonStyle"/>
     <Button
+        android:id="@+id/logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/about"
         android:textColor="@color/White"
-        android:text="Settings"
+        android:text="Log-Out"
         style="?android:attr/borderlessButtonStyle"/>
-    
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:layout_marginLeft="70dp"
+        android:textSize="10dp"
+        android:layout_below="@id/logout"
+        android:textColor="@color/White"
+        android:text="Made By MAD321 for Mobile Programming © "
 </RelativeLayout>
