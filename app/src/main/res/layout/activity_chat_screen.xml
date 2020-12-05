@@ -22,7 +22,6 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="white"
             android:layout_marginStart="25dp"
             android:layout_marginLeft="25dp"
             android:id="@+id/username"

@@ -83,5 +83,5 @@
         android:textSize="10dp"
         android:layout_below="@id/logout"
         android:textColor="@color/White"
-        android:text="Made By MAD321 for Mobile Programming © "
+        android:text="Made By MAD321 for Mobile Programming © "/>
 </RelativeLayout>

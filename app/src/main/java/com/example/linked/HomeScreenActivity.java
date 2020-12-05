@@ -9,6 +9,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +29,14 @@ public class HomeScreenActivity extends AppCompatActivity {
         new LoadData().execute();
     }
 
-    private class LoadData extends AsyncTask<Void, Void, String>{
+    private class LoadData extends AsyncTask<Void, Void, Void> {
 
         @Override
-        protected String doInBackground(Void... voids) {
+        protected Void doInBackground(Void... voids) {
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("users").
+
             return null;
         }
 
@@ -40,8 +46,8 @@ public class HomeScreenActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
 
             contactsRecyclerview = findViewById(R.id.homeScreenRecyclerview);
             contactsRecyclerview.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
