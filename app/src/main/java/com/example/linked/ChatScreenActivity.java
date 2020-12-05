@@ -10,6 +10,6 @@ public class ChatScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chatScreen);
+        setContentView(R.layout.activity_chat_screen);
     }
 }
