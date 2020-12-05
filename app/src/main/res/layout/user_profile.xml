@@ -57,7 +57,15 @@
         android:textColor="@color/White"
         android:text="Settings"
         style="?android:attr/borderlessButtonStyle"/>
- 
+    <Button
+        android:id="@+id/about"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/settings"
+        android:textColor="@color/White"
+        android:text="About"
+        style="?android:attr/borderlessButtonStyle"/>
+    
 
 
 </RelativeLayout>
