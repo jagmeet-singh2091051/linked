@@ -18,10 +18,29 @@
             android:layout_height="wrap_content"
             android:textSize="30dp"
             android:text="Welcome to Linked"
-            android:layout_marginLeft=""/>
+            android:layout_marginBottom="30dp"
+            />
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="Username"
+            android:gravity="center"
+            />
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="Enter your Name"
+            android:gravity="center"/>
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="Enter Password"
+            android:gravity="center"/>
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Register"
             />
     </LinearLayout>
 </RelativeLayout>
