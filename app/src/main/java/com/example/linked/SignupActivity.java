@@ -3,6 +3,7 @@ package com.example.linked;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -57,52 +58,56 @@ public class SignupActivity extends AppCompatActivity {
             Intent intent = new Intent(SignupActivity.this, HomeScreenActivity.class);
             startActivity(intent);
         }
-        else {
-            firebaseAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
-                                FirebaseUser user = firebaseAuth.getCurrentUser();
-                                final UserModel userInstance = UserModel.getInstance();
-                                userInstance.setEmail(user.getEmail());
-                                userInstance.setUsername(user.getDisplayName());
-                                //userInstance.setUserId(user.getUid());
 
-                                Map<String, Object> userInfo = new HashMap<>();
-                                //userInfo.put("uid", userInstance.getUserId());
-                                userInfo.put("username", userInstance.getUsername());
-                                userInfo.put("email", userInstance.getEmail());
+        signUpBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                        .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(task.isSuccessful()){
+                                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                                    final UserModel userInstance = UserModel.getInstance();
+                                    userInstance.setEmail(user.getEmail());
+                                    userInstance.setUsername(username.getText().toString());
+                                    userInstance.setUserId(user.getUid());
 
-                                db.collection("users")
-                                        .add(userInfo)
-                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                            @Override
-                                            public void onSuccess(DocumentReference documentReference) {
-                                                Map<String, Object> userInfo = new HashMap<>();
-                                                userInfo.put("uid", userInstance.getUserId());
-                                                userInfo.put("username", userInstance.getUsername());
-                                                userInfo.put("email", userInstance.getEmail());
+                                    Log.e("Email", userInstance.getEmail());
+                                    Log.e("Username", userInstance.getUsername());
+                                    Log.e("Uid", userInstance.getUserId());
 
-                                                documentReference.set(userInfo);
+                                    /*Map<String, Object> userInfo = new HashMap<>();
+                                    userInfo.put("uid", userInstance.getUserId());
+                                    userInfo.put("username", userInstance.getUsername());
+                                    userInfo.put("email", userInstance.getEmail());*/
 
-                                                Intent intent = new Intent(SignupActivity.this, HomeScreenActivity.class);
-                                                startActivity(intent);
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.w("TAG", "Error adding document", e);
-                                            }
-                                        });
+                                    db.collection("users")
+                                            .document(userInstance.getUserId())
+                                            .set(userInstance)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
 
+                                                    Intent intent = new Intent(SignupActivity.this, HomeScreenActivity.class);
+                                                    startActivity(intent);
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w("TAG", "Error adding document", e);
+                                        }
+                                    });
+
+                                }
+                                else{
+                                    Log.e("Auth Exception" , task.getException().toString());
+                                    Toast.makeText(SignupActivity.this, "Authentication failed.",
+                                            Toast.LENGTH_SHORT).show();
+                                }
                             }
-                            else{
-                                Toast.makeText(SignupActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-        }
+                        });
+            }
+        });
     }
 }

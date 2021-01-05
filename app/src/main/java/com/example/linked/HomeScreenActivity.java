@@ -10,6 +10,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,6 +29,7 @@ public class HomeScreenActivity extends AppCompatActivity {
 
     List<ContactModel> contactList = new ArrayList<ContactModel>();
 
+    TextView noContactsDefaultMsg;
     RecyclerView contactsRecyclerview;
     ContactAapter contactAapter;
 
@@ -34,69 +38,65 @@ public class HomeScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
 
-        new LoadData().execute();
-    }
+        noContactsDefaultMsg = findViewById(R.id.homeScreenNoContactsDefaultMsg);
+        contactsRecyclerview = findViewById(R.id.homeScreenRecyclerview);
+        contactsRecyclerview.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
-    private class LoadData extends AsyncTask<Void, Void, Void> {
 
-        @Override
-        protected Void doInBackground(Void... voids) {
 
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("users")
-                    .document(userInstance.getUserId())
-                    .collection("contacts")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if(task.isSuccessful()){
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    MessageModel lastMsg = (MessageModel) document.get("lastMsg");
-                                    ContactModel contact = new ContactModel(
-                                            document.get("userId").toString(),
-                                            document.get("userName").toString(),
-                                            document.get("imageUrl").toString(),
-                                            lastMsg
-                                    );
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users")
+                .document(userInstance.getUserId())
+                .collection("contacts")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            Log.e("Data fetch", "Success");
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                //MessageModel lastMsg = (MessageModel) document.get("lastMsg");
+                                ContactModel contact = new ContactModel(
+                                        document.get("userId").toString(),
+                                        document.get("userName").toString(),
+                                        document.get("imageUrl").toString()
+                                        //lastMsg
+                                );
+                                Log.e("contact uid", contact.getUserId());
 
-                                    contactList.add(contact);
-                                }
+                                contactList.add(contact);
+
+                            }
+
+
+                            if(!contactList.isEmpty()) {
+
+                                contactsRecyclerview.setVisibility(View.VISIBLE);
+                                noContactsDefaultMsg.setVisibility(View.GONE);
+
+                                contactAapter = new ContactAapter(contactList);
+                                contactAapter.setOnClickListener(new ContactAapter.ClickListener() {
+                                    @Override
+                                    public void onItemClick(int position, View v) {
+                                        Intent intent = new Intent(HomeScreenActivity.this, ChatScreenActivity.class);
+                                        intent.putExtra("USERID", contactList.get(position).getUserId());
+                                        startActivity(intent);
+                                    }
+                                });
+                                contactsRecyclerview.setAdapter(contactAapter);
                             }
                             else{
-                                Log.w("TAG", "Error getting documents.", task.getException());
+                                contactsRecyclerview.setVisibility(View.GONE);
+                                noContactsDefaultMsg.setVisibility(View.VISIBLE);
                             }
+
+
                         }
-                    });
-
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-
-            if(!contactList.isEmpty()) {
-
-                contactsRecyclerview = findViewById(R.id.homeScreenRecyclerview);
-                contactsRecyclerview.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                contactAapter = new ContactAapter(contactList);
-                contactAapter.setOnClickListener(new ContactAapter.ClickListener() {
-                    @Override
-                    public void onItemClick(int position, View v) {
-                        Intent intent = new Intent(HomeScreenActivity.this, ChatScreenActivity.class);
-                        intent.putExtra("USERID", contactList.get(position).getUserId());
-                        startActivity(intent);
+                        else{
+                            Log.w("TAG", "Error getting documents.", task.getException());
+                        }
                     }
                 });
-                contactsRecyclerview.setAdapter(contactAapter);
-            }
-        }
-    }
 
+    }
 }

@@ -9,6 +9,22 @@
         android:id="@+id/homeScreenRecyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/contact_container" />
+        tools:listitem="@layout/contact_container"
+        android:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/homeScreenNoContactsDefaultMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="No contacts found!"
+        android:visibility="gone"/>
+
+    <ProgressBar
+        android:id="@+id/homeScreenProgressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
 
 </RelativeLayout>

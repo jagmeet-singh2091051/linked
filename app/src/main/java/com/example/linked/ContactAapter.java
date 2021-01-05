@@ -36,11 +36,13 @@ public class ContactAapter extends RecyclerView.Adapter<ContactAapter.ContactVie
 
         Glide.with(holder.itemView).load(contact.getImageUrl()).into(holder.profileImage);
         holder.username.setText(contact.getUserName());
-        holder.lastMsg.setText(contact.getLastMsg().getMessage());
-        if(contact.getLastMsg().isSent())
-            holder.timestamp.setText(contact.getLastMsg().getTimeSent().toString());
-        else
-            holder.timestamp.setText(contact.getLastMsg().getTimeReceived().toString());
+        if(contact.getLastMsg() != null){holder.lastMsg.setText(contact.getLastMsg().getMessage());}
+        if(contact.getLastMsg() != null) {
+            if (contact.getLastMsg().isSent())
+                holder.timestamp.setText(contact.getLastMsg().getTimeSent().toString());
+            else
+                holder.timestamp.setText(contact.getLastMsg().getTimeReceived().toString());
+        }
     }
 
     @Override
