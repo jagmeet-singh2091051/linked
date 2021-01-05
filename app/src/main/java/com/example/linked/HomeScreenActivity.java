@@ -78,8 +78,10 @@ public class HomeScreenActivity extends AppCompatActivity {
                                 contactAapter.setOnClickListener(new ContactAapter.ClickListener() {
                                     @Override
                                     public void onItemClick(int position, View v) {
+                                        Log.e("Contact Clicked", contactList.get(position).getUserName());
                                         Intent intent = new Intent(HomeScreenActivity.this, ChatScreenActivity.class);
-                                        intent.putExtra("USERID", contactList.get(position).getUserId());
+                                        intent.putExtra("CONTACT_USER_ID", contactList.get(position).getUserId());
+                                        intent.putExtra("CONTACT_USER_NAME", contactList.get(position).getUserName());
                                         startActivity(intent);
                                     }
                                 });

@@ -32,17 +32,19 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         MessageModel message = messageList.get(position);
 
-        if(message.isSent()){
-            holder.msgSentLayout.setVisibility(View.VISIBLE);
-            holder.msgReceivedLayout.setVisibility(View.GONE);
-            holder.msgSentTV.setText(message.getMessage());
-            holder.msgSentTimestamp.setText(message.getTimeSent().toString());
-        }
-        else {
-            holder.msgSentLayout.setVisibility(View.GONE);
-            holder.msgReceivedLayout.setVisibility(View.VISIBLE);
-            holder.msgReceivedTV.setText(message.getMessage());
-            holder.msgReceivedTimestamp.setText(message.getTimeSent().toString());
+        if(message != null) {
+
+            if (message.isSent()) {
+                holder.msgSentLayout.setVisibility(View.VISIBLE);
+                holder.msgReceivedLayout.setVisibility(View.GONE);
+                holder.msgSentTV.setText(message.getMessage());
+                holder.msgSentTimestamp.setText(message.getTimeSent().toString());
+            } else {
+                holder.msgSentLayout.setVisibility(View.GONE);
+                holder.msgReceivedLayout.setVisibility(View.VISIBLE);
+                holder.msgReceivedTV.setText(message.getMessage());
+                holder.msgReceivedTimestamp.setText(message.getTimeSent().toString());
+            }
         }
     }
 

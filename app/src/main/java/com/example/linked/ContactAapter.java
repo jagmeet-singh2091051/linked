@@ -34,15 +34,27 @@ public class ContactAapter extends RecyclerView.Adapter<ContactAapter.ContactVie
 
         ContactModel contact = contactList.get(position);
 
-        Glide.with(holder.itemView).load(contact.getImageUrl()).into(holder.profileImage);
-        holder.username.setText(contact.getUserName());
-        if(contact.getLastMsg() != null){holder.lastMsg.setText(contact.getLastMsg().getMessage());}
+        if(contact.getImageUrl() != null)
+            Glide.with(holder.itemView).load(contact.getImageUrl()).into(holder.profileImage);
+
+        if(contact.getUserName() != null)
+            holder.username.setText(contact.getUserName());
+        else
+            holder.username.setText("");
+
+        if(contact.getLastMsg() != null)
+            holder.lastMsg.setText(contact.getLastMsg().getMessage());
+        else
+            holder.lastMsg.setText("");
+
         if(contact.getLastMsg() != null) {
             if (contact.getLastMsg().isSent())
                 holder.timestamp.setText(contact.getLastMsg().getTimeSent().toString());
             else
                 holder.timestamp.setText(contact.getLastMsg().getTimeReceived().toString());
         }
+        else
+            holder.timestamp.setText("");
     }
 
     @Override
@@ -60,6 +72,7 @@ public class ContactAapter extends RecyclerView.Adapter<ContactAapter.ContactVie
         public ContactViewholder(View itemView) {
             super(itemView);
 
+            itemView.setOnClickListener(this);
             profileImage = itemView.findViewById(R.id.contact_item_profile_image);
             username = itemView.findViewById(R.id.contact_item_username);
             lastMsg = itemView.findViewById(R.id.contact_item_last_msg);
