@@ -43,7 +43,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 holder.msgSentLayout.setVisibility(View.GONE);
                 holder.msgReceivedLayout.setVisibility(View.VISIBLE);
                 holder.msgReceivedTV.setText(message.getMessage());
-                holder.msgReceivedTimestamp.setText(message.getTimeSent().toString());
+                holder.msgReceivedTimestamp.setText(message.getTimeReceived().toString());
             }
         }
     }

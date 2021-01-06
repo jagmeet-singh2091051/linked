@@ -10,11 +10,15 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,8 +26,13 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ChatScreenActivity extends AppCompatActivity {
 
@@ -64,7 +73,7 @@ public class ChatScreenActivity extends AppCompatActivity {
         messagesRecyclerview.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         db.collection("users").document(userInstance.getUserId())
-                .collection("contacts").document(contactUserId).collection("messages")
+                .collection("contacts").document(contactUserId).collection("messages").orderBy("timestamp")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -72,11 +81,15 @@ public class ChatScreenActivity extends AppCompatActivity {
                             Log.e( "Listen failed: ", error.toString());
                             return;
                         }
+                        else{
+                            messageList.clear();
+                            messageAdapter.notifyDataSetChanged();
+                        }
 
                         for(QueryDocumentSnapshot doc : value){
                             if(doc.get("message") != null){
-                                MessageModel msg = new MessageModel(doc.getString("message"), doc.getDate("timeSent"),
-                                        doc.getDate("timeReceived"), doc.getBoolean("sent"));
+                                MessageModel msg = new MessageModel(doc.getString("message"), doc.getString("timeSent"),
+                                        doc.getString("timeReceived"), doc.getBoolean("sent"), doc.getTimestamp("timestamp"));
 
                                 messageList.add(msg);
                             }
@@ -91,9 +104,53 @@ public class ChatScreenActivity extends AppCompatActivity {
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(messageET.getText() != null){
-                    
+                if(!messageET.getText().toString().equals("")){
+
+                    DateFormat df = new SimpleDateFormat("h:mm a", Locale.getDefault());
+                    String date = df.format(Calendar.getInstance().getTime());
+
+                    MessageModel newSentMsg = new MessageModel(messageET.getText().toString(), date, date, true, Timestamp.now());
+                    MessageModel newReceivedMsg = new MessageModel(messageET.getText().toString(), date, date, false, Timestamp.now());
+
+
+                    //Send message to our db
+                    db.collection("users").document(userInstance.getUserId())
+                            .collection("contacts").document(contactUserId)
+                            .collection("messages")
+                            .add(newSentMsg)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    //messageAdapter.notifyDataSetChanged();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.e("Message not sent: ", e.toString());
+                                }
+                            });
+
+
+                    //Send message to contact's db
+                    db.collection("users").document(contactUserId)
+                            .collection("contacts").document(userInstance.getUserId())
+                            .collection("messages")
+                            .add(newReceivedMsg)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    //messageAdapter.notifyDataSetChanged();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.e("Message not sent: ", e.toString());
+                                }
+                            });
                 }
+                messageET.setText("");
             }
         });
 

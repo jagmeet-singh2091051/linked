@@ -1,24 +1,28 @@
 package com.example.linked;
 
+import com.google.firebase.Timestamp;
+
 import java.util.Date;
 
 public class MessageModel {
 
     private String message;
-    private Date timeSent;
-    private Date timeReceived;
+    private String timeSent;
+    private String timeReceived;
     private boolean sent;
+    private Timestamp timestamp;
 
     public MessageModel(){
 
     }
 
-    public MessageModel(String message, Date timeSent, Date timeReceived, boolean sent){
+    public MessageModel(String message, String timeSent, String timeReceived, boolean sent, Timestamp timestamp){
 
         this.message = message;
         this.timeSent = timeSent;
         this.timeReceived = timeReceived;
         this.sent = sent;
+        this.timestamp = timestamp;
     }
 
     public String getMessage() {
@@ -29,19 +33,19 @@ public class MessageModel {
         this.message = message;
     }
 
-    public Date getTimeSent() {
+    public String getTimeSent() {
         return timeSent;
     }
 
-    public void setTimeSent(Date timeSent) {
+    public void setTimeSent(String timeSent) {
         this.timeSent = timeSent;
     }
 
-    public Date getTimeReceived() {
+    public String getTimeReceived() {
         return timeReceived;
     }
 
-    public void setTimeReceived(Date timeReceived) {
+    public void setTimeReceived(String timeReceived) {
         this.timeReceived = timeReceived;
     }
 
@@ -51,5 +55,13 @@ public class MessageModel {
 
     public void setSent(boolean sent) {
         this.sent = sent;
+    }
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 }
