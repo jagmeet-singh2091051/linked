@@ -16,6 +16,11 @@ public class MessageModel {
 
     }
 
+    public MessageModel(String message, String timeSent){
+        this.message = message;
+        this.timeSent = timeSent;
+    }
+
     public MessageModel(String message, String timeSent, String timeReceived, boolean sent, Timestamp timestamp){
 
         this.message = message;
