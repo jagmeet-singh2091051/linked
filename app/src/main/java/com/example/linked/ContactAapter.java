@@ -43,15 +43,13 @@ public class ContactAapter extends RecyclerView.Adapter<ContactAapter.ContactVie
             holder.username.setText("");
 
         if(contact.getLastMsg() != null)
-            holder.lastMsg.setText(contact.getLastMsg().getMessage());
+            holder.lastMsg.setText(contact.getLastMsg());
         else
             holder.lastMsg.setText("");
 
-        if(contact.getLastMsg() != null) {
-            if (contact.getLastMsg().isSent())
-                holder.timestamp.setText(contact.getLastMsg().getTimeSent().toString());
-            else
-                holder.timestamp.setText(contact.getLastMsg().getTimeReceived().toString());
+        if(contact.getLastMsgTime() != null) {
+                holder.timestamp.setText(contact.getLastMsgTime());
+                holder.timestamp.setText(contact.getLastMsgTime());
         }
         else
             holder.timestamp.setText("");

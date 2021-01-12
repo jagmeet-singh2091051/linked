@@ -75,8 +75,12 @@ public class ChatScreenActivity extends AppCompatActivity {
         messagesRecyclerview = findViewById(R.id.chatScreenRecycleView);
         messagesRecyclerview.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
-        db.collection("users").document(userInstance.getUserId())
-                .collection("contacts").document(contactUserId).collection("messages").orderBy("timestamp")
+        db.collection(HomeScreenActivity.USERS_COLLECTION_PATH)
+                .document(userInstance.getUserId())
+                .collection(HomeScreenActivity.CONTACTS_COLLECTION_PATH)
+                .document(contactUserId)
+                .collection(HomeScreenActivity.MESSAGES_COLLECTION_PATH)
+                .orderBy("timestamp")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -117,9 +121,11 @@ public class ChatScreenActivity extends AppCompatActivity {
 
 
                     //Send message to our db
-                    db.collection("users").document(userInstance.getUserId())
-                            .collection("contacts").document(contactUserId)
-                            .collection("messages")
+                    db.collection(HomeScreenActivity.USERS_COLLECTION_PATH)
+                            .document(userInstance.getUserId())
+                            .collection(HomeScreenActivity.CONTACTS_COLLECTION_PATH)
+                            .document(contactUserId)
+                            .collection(HomeScreenActivity.MESSAGES_COLLECTION_PATH)
                             .add(newSentMsg)
                             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                 @Override
@@ -136,9 +142,11 @@ public class ChatScreenActivity extends AppCompatActivity {
 
 
                     //Send message to contact's db
-                    db.collection("users").document(contactUserId)
-                            .collection("contacts").document(userInstance.getUserId())
-                            .collection("messages")
+                    db.collection(HomeScreenActivity.USERS_COLLECTION_PATH)
+                            .document(contactUserId)
+                            .collection(HomeScreenActivity.CONTACTS_COLLECTION_PATH)
+                            .document(userInstance.getUserId())
+                            .collection(HomeScreenActivity.MESSAGES_COLLECTION_PATH)
                             .add(newReceivedMsg)
                             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                 @Override
@@ -164,9 +172,12 @@ public class ChatScreenActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        db.collection("users").document(userInstance.getUserId())
-                .collection("contacts").document(contactUserId)
-                .update("lastMsg", messageList.get(messageList.size() - 1))
+        db.collection(HomeScreenActivity.USERS_COLLECTION_PATH)
+                .document(userInstance.getUserId())
+                .collection(HomeScreenActivity.CONTACTS_COLLECTION_PATH)
+                .document(contactUserId)
+                .update(HomeScreenActivity.LAST_MSG_PATH, messageList.get(messageList.size() - 1).getMessage()
+                        , HomeScreenActivity.LAST_MSG_TIME_PATH, messageList.get(messageList.size() - 1).getTimeSent())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

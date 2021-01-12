@@ -5,7 +5,8 @@ public class ContactModel {
     private String userName;
     private String userId;
     private String imageUrl;
-    private MessageModel lastMsg;
+    private String lastMsg;
+    private String lastMsgTime;
     private MessageModel[] msgs;
 
     public ContactModel(){
@@ -18,19 +19,12 @@ public class ContactModel {
         this.imageUrl = imageUrl;
     }
 
-    public ContactModel(String userId, String userName, String imageUrl, MessageModel lastMsg){
+    public ContactModel(String userId, String userName, String imageUrl, String lastMsg, String lastMsgTime){
         this.userId = userId;
         this.userName = userName;
         this.imageUrl = imageUrl;
         this.lastMsg = lastMsg;
-    }
-
-    public ContactModel(String userId, String userName, String imageUrl, MessageModel lastMsg, MessageModel[] msgs){
-        this.userId = userId;
-        this.userName = userName;
-        this.imageUrl = imageUrl;
-        this.lastMsg = lastMsg;
-        this.msgs = msgs;
+        this.lastMsgTime = lastMsgTime;
     }
 
     public String getUserName() {
@@ -57,11 +51,11 @@ public class ContactModel {
         this.imageUrl = imageUrl;
     }
 
-    public MessageModel getLastMsg() {
+    public String getLastMsg() {
         return lastMsg;
     }
 
-    public void setLastMsg(MessageModel lastMsg) {
+    public void setLastMsg(String lastMsg) {
         this.lastMsg = lastMsg;
     }
 
@@ -71,5 +65,13 @@ public class ContactModel {
 
     public void setMsgs(MessageModel[] msgs) {
         this.msgs = msgs;
+    }
+
+    public String getLastMsgTime() {
+        return lastMsgTime;
+    }
+
+    public void setLastMsgTime(String lastMsgTime) {
+        this.lastMsgTime = lastMsgTime;
     }
 }

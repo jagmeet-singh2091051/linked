@@ -44,5 +44,13 @@
             android:layout_height="wrap_content"
             android:text="Sign In"
             />
+
+        <TextView
+            android:id="@+id/signin_signup_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign Up?"
+            android:clickable="true"
+            android:focusable="true"/>
     </LinearLayout>
 </RelativeLayout>

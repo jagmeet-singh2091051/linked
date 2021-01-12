@@ -4,7 +4,8 @@ public final class UserModel {
 
     private String userId;
     private String email;
-    private String username;
+    private String userName;
+    private String imageUrl;
 
     private static UserModel userInstance;
 
@@ -12,10 +13,17 @@ public final class UserModel {
 
     }
 
-    public UserModel(String userId, String email, String username){
+    public UserModel(String userId, String email, String userName){
         this.userId = userId;
         this.email = email;
-        this.username = username;
+        this.userName = userName;
+    }
+
+    public UserModel(String userId, String email, String userName, String imageUrl){
+        this.userId = userId;
+        this.email = email;
+        this.userName = userName;
+        this.imageUrl = imageUrl;
     }
 
     public static UserModel getInstance(){
@@ -42,11 +50,19 @@ public final class UserModel {
         this.email = email;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
