@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,8 +28,10 @@ public class SigninActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private UserModel userInstance = UserModel.getInstance();
 
-    EditText email;
-    EditText password;
+    TextInputEditText email;
+    TextInputEditText password;
+    TextInputLayout emailTil;
+    TextInputLayout passwordTil;
     Button signInBtn;
     TextView signUpBtn;
 
@@ -40,6 +44,8 @@ public class SigninActivity extends AppCompatActivity {
         password = findViewById(R.id.signin_password);
         signInBtn = findViewById(R.id.signin_btn);
         signUpBtn = findViewById(R.id.signin_signup_btn);
+        emailTil = findViewById(R.id.signin_email_til);
+        passwordTil = findViewById(R.id.signin_password_til);
 
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -81,60 +87,71 @@ public class SigninActivity extends AppCompatActivity {
 
             Intent intent = new Intent(SigninActivity.this, HomeScreenActivity.class);
             startActivity(intent);
+            finish();
         }
 
         signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firebaseAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
-                        .addOnCompleteListener(SigninActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isSuccessful()){
-                                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                if(email.getText().toString().isEmpty()){
+                    emailTil.setError("Please enter a valid Email Id!");
+                }
+                else if(password.getText().toString().isEmpty() || password.getText().toString().length() < 6){
+                    emailTil.setError(null);
+                    passwordTil.setError("Password must be at least 6 characters long!");
+                }
+                else {
+                    emailTil.setError(null);
+                    passwordTil.setError(null);
+                    firebaseAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                            .addOnCompleteListener(SigninActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        FirebaseUser user = firebaseAuth.getCurrentUser();
 
-                                    userInstance.setUserId(user.getUid());
+                                        userInstance.setUserId(user.getUid());
 
 
-                                    db.collection(HomeScreenActivity.USERS_COLLECTION_PATH)
-                                            .document(user.getUid())
-                                            .get()
-                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                    if(task.isSuccessful()){
-                                                        DocumentSnapshot document = task.getResult();
-                                                        if (document != null) {
-                                                            if(document.exists()){
-                                                                userInstance.setUserName(document.get(HomeScreenActivity.USERNAME_PATH).toString());
-                                                                userInstance.setEmail(document.get(HomeScreenActivity.EMAIL_PATH).toString());
-                                                                userInstance.setImageUrl(document.get(HomeScreenActivity.IMAGE_URL_PATH).toString());
+                                        db.collection(HomeScreenActivity.USERS_COLLECTION_PATH)
+                                                .document(user.getUid())
+                                                .get()
+                                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                        if (task.isSuccessful()) {
+                                                            DocumentSnapshot document = task.getResult();
+                                                            if (document != null) {
+                                                                if (document.exists()) {
+                                                                    userInstance.setUserName(document.get(HomeScreenActivity.USERNAME_PATH).toString());
+                                                                    userInstance.setEmail(document.get(HomeScreenActivity.EMAIL_PATH).toString());
+                                                                    userInstance.setImageUrl(document.get(HomeScreenActivity.IMAGE_URL_PATH).toString());
 
-                                                                Intent intent = new Intent(SigninActivity.this, HomeScreenActivity.class);
-                                                                startActivity(intent);
-                                                            }
-                                                            else{
-                                                                Log.e("SignInActivity", "Document not found!");
+                                                                    Intent intent = new Intent(SigninActivity.this, HomeScreenActivity.class);
+                                                                    startActivity(intent);
+                                                                    finish();
+                                                                } else {
+                                                                    Log.e("SignInActivity", "Document not found!");
+                                                                }
                                                             }
                                                         }
                                                     }
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Log.w("TAG", "Error retrieving document", e);
-                                                }
-                                            });
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.w("TAG", "Error retrieving document", e);
+                                                    }
+                                                });
 
+                                    } else {
+                                        Log.e("Auth Exception", task.getException().toString());
+                                        Toast.makeText(SigninActivity.this, "Authentication failed.",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                                else{
-                                    Log.e("Auth Exception" , task.getException().toString());
-                                    Toast.makeText(SigninActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                            });
+                }
             }
         });
 
@@ -143,6 +160,7 @@ public class SigninActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(SigninActivity.this, SignupActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 

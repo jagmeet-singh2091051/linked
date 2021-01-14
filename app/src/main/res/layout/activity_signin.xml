@@ -1,56 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/gradient">
-    <include
-        layout="@layout/bar_layout"
-        />
+    android:background="@color/White"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
+
         <TextView
-            android:layout_marginTop="100dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:textColor="@color/White"
-            android:text="Welcome to Linked"
-            android:layout_marginBottom="30dp"
+            android:textSize="40sp"
+            android:textColor="@color/colorPrimary"
+            android:text="Linked"
+            android:layout_marginBottom="50dp" />
 
-            />
-        <EditText
-            android:id="@+id/signin_email"
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/signin_email_til"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/White"
-            android:hint="Enter your Email"
-            android:gravity="center"/>
-        <EditText
-            android:id="@+id/signin_password"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/signin_email"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/Black"
+                android:inputType="textEmailAddress"
+                android:hint="Enter your Email" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/signin_password_til"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/White"
-            android:hint="Enter Password"
-            android:gravity="center"
-            android:layout_marginBottom="5dp"/>
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/colorPrimary"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:errorEnabled="true"
+            android:layout_marginTop="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/signin_password"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/Black"
+                android:inputType="textPassword"
+                android:hint="Enter Password" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/signin_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sign In"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginTop="40dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             />
 
         <TextView
             android:id="@+id/signin_signup_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sign Up?"
+            android:text="New to Linked? Sign Up"
+            android:textSize="14sp"
             android:clickable="true"
-            android:focusable="true"/>
+            android:focusable="true"
+            android:layout_marginTop="5dp"/>
     </LinearLayout>
+
 </RelativeLayout>

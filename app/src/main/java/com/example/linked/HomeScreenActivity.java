@@ -1,14 +1,13 @@
 package com.example.linked;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,13 +17,14 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class HomeScreenActivity extends AppCompatActivity {
 
@@ -47,8 +47,8 @@ public class HomeScreenActivity extends AppCompatActivity {
     TextView noContactsDefaultMsg;
     RecyclerView contactsRecyclerview;
     RecyclerView searchRecyclerView;
-    ContactAapter contactAapter;
-    ContactAapter contactAapter2;
+    ContactAdapter contactAdapter;
+    ContactAdapter contactAdapter2;
     android.widget.SearchView searchView;
     Toolbar toolbar;
 
@@ -70,16 +70,18 @@ public class HomeScreenActivity extends AppCompatActivity {
         contactsRecyclerview.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
 
+
+        //get user's contacts
         db.collection(HomeScreenActivity.USERS_COLLECTION_PATH)
                 .document(userInstance.getUserId())
                 .collection(HomeScreenActivity.CONTACTS_COLLECTION_PATH)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            Log.e("Data fetch", "Success");
-                            for (QueryDocumentSnapshot document : task.getResult()) {
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                        contactList.clear();
+                        for(QueryDocumentSnapshot document : value){
+                            if(document != null){
 
                                 ContactModel contact = new ContactModel(
                                         document.get(HomeScreenActivity.USERID_PATH).toString(),
@@ -88,43 +90,41 @@ public class HomeScreenActivity extends AppCompatActivity {
                                         document.get(HomeScreenActivity.LAST_MSG_PATH).toString(),
                                         document.get(HomeScreenActivity.LAST_MSG_TIME_PATH).toString()
                                 );
-                                Log.e("contact uid", contact.getUserId());
 
                                 contactList.add(contact);
 
+                                if(!contactList.isEmpty()) {
+
+                                    contactsRecyclerview.setVisibility(View.VISIBLE);
+                                    noContactsDefaultMsg.setVisibility(View.GONE);
+
+                                    contactAdapter = new ContactAdapter(contactList);
+                                    contactAdapter.setOnClickListener(new ContactAdapter.ClickListener() {
+                                        @Override
+                                        public void onItemClick(int position, View v) {
+                                            Log.e("Contact Clicked", contactList.get(position).getUserName());
+                                            Intent intent = new Intent(HomeScreenActivity.this, ChatScreenActivity.class);
+                                            intent.putExtra("CONTACT_USER_ID", contactList.get(position).getUserId());
+                                            intent.putExtra("CONTACT_USER_NAME", contactList.get(position).getUserName());
+                                            startActivity(intent);
+                                        }
+                                    });
+                                    contactsRecyclerview.setAdapter(contactAdapter);
+                                }
+                                else{
+                                    contactsRecyclerview.setVisibility(View.GONE);
+                                    noContactsDefaultMsg.setVisibility(View.VISIBLE);
+                                }
+
                             }
 
-
-                            if(!contactList.isEmpty()) {
-
-                                contactsRecyclerview.setVisibility(View.VISIBLE);
-                                noContactsDefaultMsg.setVisibility(View.GONE);
-
-                                contactAapter = new ContactAapter(contactList);
-                                contactAapter.setOnClickListener(new ContactAapter.ClickListener() {
-                                    @Override
-                                    public void onItemClick(int position, View v) {
-                                        Log.e("Contact Clicked", contactList.get(position).getUserName());
-                                        Intent intent = new Intent(HomeScreenActivity.this, ChatScreenActivity.class);
-                                        intent.putExtra("CONTACT_USER_ID", contactList.get(position).getUserId());
-                                        intent.putExtra("CONTACT_USER_NAME", contactList.get(position).getUserName());
-                                        startActivity(intent);
-                                    }
-                                });
-                                contactsRecyclerview.setAdapter(contactAapter);
-                            }
                             else{
-                                contactsRecyclerview.setVisibility(View.GONE);
-                                noContactsDefaultMsg.setVisibility(View.VISIBLE);
+                                Log.w("TAG", "Error getting documents.", error);
                             }
-
-
-                        }
-                        else{
-                            Log.w("TAG", "Error getting documents.", task.getException());
                         }
                     }
                 });
+
 
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
@@ -234,8 +234,9 @@ public class HomeScreenActivity extends AppCompatActivity {
                                         );
                                         searchList.add(contact);
 
-                                        contactAapter2 = new ContactAapter(searchList);
-                                        contactAapter2.setOnClickListener(new ContactAapter.ClickListener() {
+                                        contactAdapter2 = new ContactAdapter(searchList);
+                                        searchRecyclerView.setAdapter(contactAdapter2);
+                                        contactAdapter2.setOnClickListener(new ContactAdapter.ClickListener() {
                                             @Override
                                             public void onItemClick(int position, View v) {
                                                 //Add new contact to contact list
@@ -254,15 +255,13 @@ public class HomeScreenActivity extends AppCompatActivity {
                                                                 contactsRecyclerview.setVisibility(View.VISIBLE);
                                                                 searchRecyclerView.setVisibility(View.GONE);
 
-                                                                finish();
-                                                                startActivity(getIntent());
+                                                                /*finish();
+                                                                startActivity(getIntent());*/
                                                             }
                                                         });
 
                                             }
                                         });
-
-                                        searchRecyclerView.setAdapter(contactAapter2);
                                     }
                                 }
                             }

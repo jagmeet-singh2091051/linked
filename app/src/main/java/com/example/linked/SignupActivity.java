@@ -16,6 +16,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,9 +29,12 @@ public class SignupActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private UserModel userInstance = UserModel.getInstance();
 
-    EditText username;
-    EditText email;
-    EditText password;
+    TextInputEditText username;
+    TextInputEditText email;
+    TextInputEditText password;
+    TextInputLayout usernameTil;
+    TextInputLayout emailTil;
+    TextInputLayout passwordTil;
     Button signUpBtn;
     TextView signInBtn;
 
@@ -43,6 +48,9 @@ public class SignupActivity extends AppCompatActivity {
         password = findViewById(R.id.signup_password);
         signUpBtn = findViewById(R.id.signup_btn);
         signInBtn = findViewById(R.id.signup_signin_btn);
+        usernameTil = findViewById(R.id.signup_username_til);
+        emailTil = findViewById(R.id.signup_email_til);
+        passwordTil = findViewById(R.id.signup_password_til);
 
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -84,48 +92,67 @@ public class SignupActivity extends AppCompatActivity {
 
             Intent intent = new Intent(SignupActivity.this, HomeScreenActivity.class);
             startActivity(intent);
+            finish();
         }
 
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firebaseAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
-                        .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isSuccessful()){
-                                    FirebaseUser user = firebaseAuth.getCurrentUser();
 
-                                    userInstance.setEmail(user.getEmail());
-                                    userInstance.setUserName(username.getText().toString());
-                                    userInstance.setUserId(user.getUid());
-                                    userInstance.setImageUrl("default url");
+                if(username.getText().toString().isEmpty()){
+                    usernameTil.setError("Username cannot be empty!");
+                }
+                else if(email.getText().toString().isEmpty()){
+                    usernameTil.setError(null);
+                    emailTil.setError("Please enter a valid Email Id!");
+                }
+                else if(password.getText().toString().isEmpty() || password.getText().toString().length() < 6){
+                    usernameTil.setError(null);
+                    emailTil.setError(null);
+                    passwordTil.setError("Password must be at least 6 characters long!");
+                }
+                else {
+                    usernameTil.setError(null);
+                    emailTil.setError(null);
+                    passwordTil.setError(null);
+                    firebaseAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                            .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        FirebaseUser user = firebaseAuth.getCurrentUser();
 
-                                    db.collection(HomeScreenActivity.USERS_COLLECTION_PATH)
-                                            .document(userInstance.getUserId())
-                                            .set(userInstance)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
+                                        userInstance.setEmail(user.getEmail());
+                                        userInstance.setUserName(username.getText().toString());
+                                        userInstance.setUserId(user.getUid());
+                                        userInstance.setImageUrl("default url");
 
-                                                    Intent intent = new Intent(SignupActivity.this, HomeScreenActivity.class);
-                                                    startActivity(intent);
-                                                }
-                                            }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.w("TAG", "Error adding document", e);
-                                        }
-                                    });
+                                        db.collection(HomeScreenActivity.USERS_COLLECTION_PATH)
+                                                .document(userInstance.getUserId())
+                                                .set(userInstance)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
 
+                                                        Intent intent = new Intent(SignupActivity.this, HomeScreenActivity.class);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w("TAG", "Error adding document", e);
+                                            }
+                                        });
+
+                                    } else {
+                                        Log.e("Auth Exception", task.getException().toString());
+                                        Toast.makeText(SignupActivity.this, "Authentication failed.",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                                else{
-                                    Log.e("Auth Exception" , task.getException().toString());
-                                    Toast.makeText(SignupActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                            });
+                }
             }
         });
 
@@ -135,6 +162,7 @@ public class SignupActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(SignupActivity.this, SigninActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

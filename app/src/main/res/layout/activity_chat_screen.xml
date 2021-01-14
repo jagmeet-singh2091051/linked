@@ -13,11 +13,17 @@
         android:background="@color/colorPrimaryDark"
         android:theme="@style/Widget.AppCompat.PopupMenu" >
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@color/White"
-            android:id="@+id/profile_image"/>
+        <TextView
+            android:id="@+id/profile_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:text="A"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:gravity="center"
+            android:background="@drawable/circular_bg_50dp"
+            android:backgroundTint="@color/White"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -38,7 +44,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
         android:padding="5dp"
-        tools:listitem="@layout/message_container"/>
+        tools:listitem="@layout/message_container"
+        android:layout_marginBottom="50dp"/>
 
 
     <RelativeLayout
@@ -53,7 +60,7 @@
             android:id="@+id/text_send"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="13dp"
+            android:layout_marginRight="40dp"
             android:hint="Type a message...." />
 
         <ImageButton

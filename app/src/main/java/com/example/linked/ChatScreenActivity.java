@@ -45,6 +45,7 @@ public class ChatScreenActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     TextView usernameTV;
+    TextView initialsTV;
     ImageButton sendBtn;
     EditText messageET;
 
@@ -61,6 +62,8 @@ public class ChatScreenActivity extends AppCompatActivity {
         messageET = findViewById(R.id.text_send);
         sendBtn = findViewById(R.id.send_button);
         usernameTV = findViewById(R.id.username);
+        initialsTV = findViewById(R.id.profile_image);
+
 
         Intent intentThatStartedThisActivity = getIntent();
         if(intentThatStartedThisActivity.hasExtra("CONTACT_USER_ID")){
@@ -70,6 +73,7 @@ public class ChatScreenActivity extends AppCompatActivity {
             contactUsername = intentThatStartedThisActivity.getStringExtra("CONTACT_USER_NAME");
         }
 
+        initialsTV.setText(String.valueOf(contactUsername.toUpperCase().charAt(0)));
         usernameTV.setText(contactUsername);
 
         messagesRecyclerview = findViewById(R.id.chatScreenRecycleView);
@@ -90,7 +94,6 @@ public class ChatScreenActivity extends AppCompatActivity {
                         }
                         else{
                             messageList.clear();
-                            messageAdapter.notifyDataSetChanged();
                         }
 
                         for(QueryDocumentSnapshot doc : value){
@@ -118,6 +121,9 @@ public class ChatScreenActivity extends AppCompatActivity {
 
                     MessageModel newSentMsg = new MessageModel(messageET.getText().toString(), date, date, true, Timestamp.now());
                     MessageModel newReceivedMsg = new MessageModel(messageET.getText().toString(), date, date, false, Timestamp.now());
+
+                    messageList.add(newSentMsg);
+                    messageAdapter.notifyDataSetChanged();
 
 
                     //Send message to our db
@@ -161,6 +167,31 @@ public class ChatScreenActivity extends AppCompatActivity {
                                 }
                             });
                 }
+
+                //update last msg
+                if (!messageList.isEmpty()) {
+                    db.collection(HomeScreenActivity.USERS_COLLECTION_PATH)
+                            .document(userInstance.getUserId())
+                            .collection(HomeScreenActivity.CONTACTS_COLLECTION_PATH)
+                            .document(contactUserId)
+                            .update(HomeScreenActivity.LAST_MSG_PATH, messageList.get(messageList.size() - 1).getMessage()
+                                    , HomeScreenActivity.LAST_MSG_TIME_PATH, messageList.get(messageList.size() - 1).getTimeSent())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+
+                                    Log.e("LastMsgUpdate Success", messageList.get(messageList.size() - 1).getMessage());
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+
+                                    Log.e("LastMsgUpdate Failed", e.toString());
+                                }
+                            });
+                }
+
                 messageET.setText("");
             }
         });
@@ -168,22 +199,24 @@ public class ChatScreenActivity extends AppCompatActivity {
 
     }
 
-    @Override
+    /*@Override
     protected void onDestroy() {
         super.onDestroy();
 
-        db.collection(HomeScreenActivity.USERS_COLLECTION_PATH)
-                .document(userInstance.getUserId())
-                .collection(HomeScreenActivity.CONTACTS_COLLECTION_PATH)
-                .document(contactUserId)
-                .update(HomeScreenActivity.LAST_MSG_PATH, messageList.get(messageList.size() - 1).getMessage()
-                        , HomeScreenActivity.LAST_MSG_TIME_PATH, messageList.get(messageList.size() - 1).getTimeSent())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
+        if (!messageList.isEmpty()) {
+            db.collection(HomeScreenActivity.USERS_COLLECTION_PATH)
+                    .document(userInstance.getUserId())
+                    .collection(HomeScreenActivity.CONTACTS_COLLECTION_PATH)
+                    .document(contactUserId)
+                    .update(HomeScreenActivity.LAST_MSG_PATH, messageList.get(messageList.size() - 1).getMessage()
+                            , HomeScreenActivity.LAST_MSG_TIME_PATH, messageList.get(messageList.size() - 1).getTimeSent())
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
 
-                    }
-                });
-            }
+                        }
+                    });
+        }
+    }*/
 
 }

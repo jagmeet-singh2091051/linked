@@ -36,6 +36,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:iconifiedByDefault="true"
+                android:searchIcon="@drawable/ic_white_search_24"
+                android:closeIcon="@drawable/ic_white_close_24"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 />
@@ -52,7 +54,9 @@
         android:layout_height="match_parent"
         tools:listitem="@layout/contact_container"
         android:visibility="visible"
-        android:layout_below="@id/home_screen_toolbar" />
+        android:layout_below="@id/home_screen_toolbar"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/homeScreenSearchView"

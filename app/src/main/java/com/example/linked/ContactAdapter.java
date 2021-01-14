@@ -1,5 +1,7 @@
 package com.example.linked;
 
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,19 +9,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-public class ContactAapter extends RecyclerView.Adapter<ContactAapter.ContactViewholder> {
+public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewholder> {
 
     List<ContactModel> contactList = new ArrayList<ContactModel>();
     private static ClickListener clickListener;
 
-    public ContactAapter(List<ContactModel> list){
+    public ContactAdapter(List<ContactModel> list){
         this.contactList = list;
     }
 
@@ -34,13 +37,20 @@ public class ContactAapter extends RecyclerView.Adapter<ContactAapter.ContactVie
 
         ContactModel contact = contactList.get(position);
 
-        if(contact.getImageUrl() != null)
-            Glide.with(holder.itemView).load(contact.getImageUrl()).into(holder.profileImage);
+        holder.profileImage.setVisibility(View.INVISIBLE);
+        holder.initialsTV.setVisibility(View.VISIBLE);
 
-        if(contact.getUserName() != null)
+
+        if(contact.getImageUrl() != null)
+            //Glide.with(holder.itemView).load(contact.getImageUrl()).into(holder.profileImage);
+
+        if(contact.getUserName() != null) {
             holder.username.setText(contact.getUserName());
+            holder.initialsTV.setText(String.valueOf(contact.getUserName().toUpperCase().charAt(0)));
+        }
         else
             holder.username.setText("");
+
 
         if(contact.getLastMsg() != null)
             holder.lastMsg.setText(contact.getLastMsg());
@@ -48,7 +58,6 @@ public class ContactAapter extends RecyclerView.Adapter<ContactAapter.ContactVie
             holder.lastMsg.setText("");
 
         if(contact.getLastMsgTime() != null) {
-                holder.timestamp.setText(contact.getLastMsgTime());
                 holder.timestamp.setText(contact.getLastMsgTime());
         }
         else
@@ -63,6 +72,7 @@ public class ContactAapter extends RecyclerView.Adapter<ContactAapter.ContactVie
     public static class ContactViewholder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private ImageView profileImage;
+        private TextView initialsTV;
         private TextView username;
         private TextView lastMsg;
         private TextView timestamp;
@@ -71,7 +81,8 @@ public class ContactAapter extends RecyclerView.Adapter<ContactAapter.ContactVie
             super(itemView);
 
             itemView.setOnClickListener(this);
-            profileImage = itemView.findViewById(R.id.contact_item_profile_image);
+            profileImage = itemView.findViewById(R.id.contact_item_profile_imageview);
+            initialsTV = itemView.findViewById(R.id.contact_item_profile_tv);
             username = itemView.findViewById(R.id.contact_item_username);
             lastMsg = itemView.findViewById(R.id.contact_item_last_msg);
             timestamp = itemView.findViewById(R.id.contact_item_timestamp);
@@ -84,7 +95,7 @@ public class ContactAapter extends RecyclerView.Adapter<ContactAapter.ContactVie
     }
 
     public void setOnClickListener(ClickListener clickListener){
-        ContactAapter.clickListener = clickListener;
+        ContactAdapter.clickListener = clickListener;
     }
 
     public interface ClickListener{
