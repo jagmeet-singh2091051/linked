@@ -11,8 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SigninActivity"/>
-        <activity android:name=".HomeScreenActivity"/>
+        <activity android:name=".UserProfileActivity"></activity>
+        <activity android:name=".SigninActivity" />
+        <activity android:name=".HomeScreenActivity" />
         <activity
             android:name=".SignupActivity"
             android:theme="@style/SignupScreenTheme">
@@ -22,9 +23,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ChatScreenActivity"
-            android:theme="@style/ChatScreenTheme">
-        </activity>
+        <activity
+            android:name=".ChatScreenActivity"
+            android:theme="@style/ChatScreenTheme"></activity>
     </application>
 
 </manifest>

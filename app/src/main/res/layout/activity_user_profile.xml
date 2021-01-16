@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="8dp"
+    android:background="@color/White">
+
+    <ImageButton
+        android:id="@+id/profile_close_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_green_close_24"
+        android:scaleY="1.5"
+        android:scaleX="1.5"
+        style="@style/Widget.AppCompat.Button.Borderless"/>
+
+    <ImageButton
+        android:id="@+id/profile_save_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_green_save_24"
+        android:scaleY="1.5"
+        android:scaleX="1.5"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_alignParentRight="true"/>
+
+    <TextView
+        android:id="@+id/profile_image"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:text="A"
+        android:textColor="@color/White"
+        android:textSize="100sp"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/circular_bg_150dp"
+        android:layout_marginTop="100dp"/>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/profile_username_til"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:errorEnabled="true"
+        android:layout_below="@id/profile_image"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/profile_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/Black"
+            android:hint="Username" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/profile_email_til"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:errorEnabled="true"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/profile_username_til"
+        android:layout_centerHorizontal="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/profile_email"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/Black"
+            android:inputType="textEmailAddress"
+            android:hint="Enter your Email" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/profile_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profile_email_til"
+        android:textColor="@color/colorPrimary"
+        android:text="Log-Out"
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="10dp"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+</RelativeLayout>

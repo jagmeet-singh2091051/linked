@@ -10,7 +10,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -51,6 +55,7 @@ public class HomeScreenActivity extends AppCompatActivity {
     ContactAdapter contactAdapter2;
     android.widget.SearchView searchView;
     Toolbar toolbar;
+    ImageButton settingsBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +64,14 @@ public class HomeScreenActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
+
+
         searchView = findViewById(R.id.search_view);
         toolbar = findViewById(R.id.home_screen_toolbar);
         noContactsDefaultMsg = findViewById(R.id.homeScreenNoContactsDefaultMsg);
         contactsRecyclerview = findViewById(R.id.homeScreenRecyclerview);
         searchRecyclerView = findViewById(R.id.homeScreenSearchView);
+        settingsBtn = findViewById(R.id.homescreen_toolbar_settings_btn);
 
 
         searchRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -79,54 +87,56 @@ public class HomeScreenActivity extends AppCompatActivity {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
-                        contactList.clear();
-                        for(QueryDocumentSnapshot document : value){
-                            if(document != null){
+                        if (error != null) {
+                            Log.e( "Listen failed: ", error.toString());
+                        }
+                        else {
+                            contactList.clear();
+                            for (QueryDocumentSnapshot document : value) {
+                                if (document != null) {
 
-                                ContactModel contact = new ContactModel(
-                                        document.get(HomeScreenActivity.USERID_PATH).toString(),
-                                        document.get(HomeScreenActivity.USERNAME_PATH).toString(),
-                                        document.get(HomeScreenActivity.IMAGE_URL_PATH).toString(),
-                                        document.get(HomeScreenActivity.LAST_MSG_PATH).toString(),
-                                        document.get(HomeScreenActivity.LAST_MSG_TIME_PATH).toString()
-                                );
+                                    ContactModel contact = new ContactModel(
+                                            document.get(HomeScreenActivity.USERID_PATH).toString(),
+                                            document.get(HomeScreenActivity.USERNAME_PATH).toString(),
+                                            document.get(HomeScreenActivity.IMAGE_URL_PATH).toString(),
+                                            document.get(HomeScreenActivity.LAST_MSG_PATH).toString(),
+                                            document.get(HomeScreenActivity.LAST_MSG_TIME_PATH).toString()
+                                    );
 
-                                contactList.add(contact);
+                                    contactList.add(contact);
 
-                                if(!contactList.isEmpty()) {
+                                    if (!contactList.isEmpty()) {
 
-                                    contactsRecyclerview.setVisibility(View.VISIBLE);
-                                    noContactsDefaultMsg.setVisibility(View.GONE);
+                                        contactsRecyclerview.setVisibility(View.VISIBLE);
+                                        noContactsDefaultMsg.setVisibility(View.GONE);
 
-                                    contactAdapter = new ContactAdapter(contactList);
-                                    contactAdapter.setOnClickListener(new ContactAdapter.ClickListener() {
-                                        @Override
-                                        public void onItemClick(int position, View v) {
-                                            Log.e("Contact Clicked", contactList.get(position).getUserName());
-                                            Intent intent = new Intent(HomeScreenActivity.this, ChatScreenActivity.class);
-                                            intent.putExtra("CONTACT_USER_ID", contactList.get(position).getUserId());
-                                            intent.putExtra("CONTACT_USER_NAME", contactList.get(position).getUserName());
-                                            startActivity(intent);
-                                        }
-                                    });
-                                    contactsRecyclerview.setAdapter(contactAdapter);
+                                        contactAdapter = new ContactAdapter(contactList);
+                                        contactAdapter.setOnClickListener(new ContactAdapter.ClickListener() {
+                                            @Override
+                                            public void onItemClick(int position, View v) {
+                                                Log.e("Contact Clicked", contactList.get(position).getUserName());
+                                                Intent intent = new Intent(HomeScreenActivity.this, ChatScreenActivity.class);
+                                                intent.putExtra("CONTACT_USER_ID", contactList.get(position).getUserId());
+                                                intent.putExtra("CONTACT_USER_NAME", contactList.get(position).getUserName());
+                                                startActivity(intent);
+                                            }
+                                        });
+                                        contactsRecyclerview.setAdapter(contactAdapter);
+                                    } else {
+                                        contactsRecyclerview.setVisibility(View.GONE);
+                                        noContactsDefaultMsg.setVisibility(View.VISIBLE);
+                                    }
+
+                                } else {
+                                    Log.w("TAG", "Error getting documents.", error);
                                 }
-                                else{
-                                    contactsRecyclerview.setVisibility(View.GONE);
-                                    noContactsDefaultMsg.setVisibility(View.VISIBLE);
-                                }
-
-                            }
-
-                            else{
-                                Log.w("TAG", "Error getting documents.", error);
                             }
                         }
                     }
                 });
 
 
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+        /*searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
                 searchView.setQuery("", false);
@@ -136,19 +146,8 @@ public class HomeScreenActivity extends AppCompatActivity {
                 searchRecyclerView.setVisibility(View.GONE);
                 return true;
             }
-        });
-        /*searchView.findViewById(R.id.search_close_btn)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        searchView.setQuery("", false);
-                        searchView.setIconified(true);
+        });*/
 
-                        contactsRecyclerview.setVisibility(View.VISIBLE);
-                        searchRecyclerView.setVisibility(View.GONE);
-                    }
-                });
-*/
         searchView.setOnQueryTextListener(new android.widget.SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -212,9 +211,6 @@ public class HomeScreenActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String query) {
                 searchList.clear();
-                contactsRecyclerview.setVisibility(View.GONE);
-                noContactsDefaultMsg.setVisibility(View.GONE);
-                searchRecyclerView.setVisibility(View.VISIBLE);
 
                 db.collection(HomeScreenActivity.USERS_COLLECTION_PATH)
                         .orderBy(HomeScreenActivity.USERNAME_PATH)
@@ -252,8 +248,8 @@ public class HomeScreenActivity extends AppCompatActivity {
                                                                 searchView.setQuery("", false);
                                                                 searchView.setIconified(true);
 
-                                                                contactsRecyclerview.setVisibility(View.VISIBLE);
-                                                                searchRecyclerView.setVisibility(View.GONE);
+                                                                searchList.clear();
+                                                                contactAdapter2.notifyDataSetChanged();
 
                                                                 /*finish();
                                                                 startActivity(getIntent());*/
@@ -268,6 +264,14 @@ public class HomeScreenActivity extends AppCompatActivity {
                         });
 
                 return false;
+            }
+        });
+
+        settingsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeScreenActivity.this, UserProfileActivity.class);
+                startActivity(intent);
             }
         });
 

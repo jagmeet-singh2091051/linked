@@ -9,14 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/home_screen_toolbar"
-
         android:background="@color/colorPrimaryDark"
         android:theme="@style/Widget.AppCompat.PopupMenu" >
 
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -31,22 +30,53 @@
                 android:layout_centerVertical="true"
                 />
 
-            <SearchView
-                android:id="@+id/search_view"
+            <ImageButton
+                android:id="@+id/homescreen_toolbar_settings_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:iconifiedByDefault="true"
-                android:searchIcon="@drawable/ic_white_search_24"
-                android:closeIcon="@drawable/ic_white_close_24"
-                android:layout_alignParentEnd="true"
+                android:scaleX="1.2"
+                android:scaleY="1.2"
+                android:src="@drawable/ic_white_settings_24"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_alignParentRight="true"
-                />
-
+                android:layout_alignParentEnd="true"/>
 
         </RelativeLayout>
 
+
     </androidx.appcompat.widget.Toolbar>
 
+    <LinearLayout
+        android:id="@+id/searchLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/home_screen_toolbar"
+        android:orientation="vertical">
+
+        <SearchView
+            android:id="@+id/search_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:iconifiedByDefault="true"
+            android:queryHint="Search Username.."
+            android:searchIcon="@drawable/ic_white_search_24"
+            android:closeIcon="@drawable/ic_white_close_24"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/homeScreenSearchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/contact_container"
+            android:visibility="visible" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/Grey"/>
+
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/homeScreenRecyclerview"
@@ -54,17 +84,9 @@
         android:layout_height="match_parent"
         tools:listitem="@layout/contact_container"
         android:visibility="visible"
-        android:layout_below="@id/home_screen_toolbar"
+        android:layout_below="@id/searchLayout"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/homeScreenSearchView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/contact_container"
-        android:visibility="gone"
-        android:layout_below="@id/home_screen_toolbar" />
 
     <TextView
         android:id="@+id/homeScreenNoContactsDefaultMsg"
